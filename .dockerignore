@@ -1,0 +1,45 @@
+# VCS
+.git
+.gitignore
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Testing & coverage artifacts
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Type-checker / linter caches
+.mypy_cache/
+.ruff_cache/
+.pyright/
+
+# OS / IDE files
+.DS_Store
+.idea/
+.vscode/
+
+# Environment files & local DBs (avoid baking secrets into image)
+.env
+.env.*
+*.db
+
+# Docker compose files are not needed inside the image
+docker-compose.yml
+docker-compose.*.yml
+
+# Logs
+*.log
+
+# Not required at runtime in the app image
+/tests/
