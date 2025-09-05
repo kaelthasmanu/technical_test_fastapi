@@ -6,9 +6,9 @@ from app.core.container import Container
 from app.services.task_service import TaskService
 from app.core.dependencies import get_current_user
 
-router = APIRouter()
+router = APIRouter(prefix="/tasks", tags=["tasks"])
 
-@router.post("/tasks", response_model=Task, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=Task, status_code=status.HTTP_201_CREATED)
 @inject
 def create_task(
     task: UpsertTask,
@@ -17,7 +17,7 @@ def create_task(
 ):
     return task_service.create_task(task, user.id)
 
-@router.get("/tasks", response_model=List[Task])
+@router.get("/", response_model=List[Task])
 @inject
 def list_tasks(
     user=Depends(get_current_user),
@@ -25,7 +25,7 @@ def list_tasks(
 ):
     return task_service.list_tasks(user.id)
 
-@router.get("/tasks/{id}", response_model=Task)
+@router.get("/{id}", response_model=Task)
 @inject
 def get_task(
     id: int,
@@ -37,7 +37,7 @@ def get_task(
         raise HTTPException(status_code=404, detail="Task not found")
     return task
 
-@router.put("/tasks/{id}", response_model=Task)
+@router.put("/{id}", response_model=Task)
 @inject
 def update_task(
     id: int,
@@ -50,7 +50,7 @@ def update_task(
         raise HTTPException(status_code=404, detail="Task not found or not authorized")
     return updated
 
-@router.delete("/tasks/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 @inject
 def delete_task(
     id: int,

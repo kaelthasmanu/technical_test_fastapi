@@ -1,9 +1,8 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 
 from app.services.auth_service import AuthService
 from app.schema.auth_schema import SignInResponse, SignIn
 from app.core.container import Container
-from fastapi import Depends
 
 
 router = APIRouter()
@@ -12,7 +11,8 @@ router = APIRouter()
 def get_auth_service() -> AuthService:
     return Container.auth_service()
 
-@router.post("/login", response_model=SignInResponse)
+
+@router.post("/login", response_model=SignInResponse, tags=["auth"])
 def login(request: SignIn, auth_service: AuthService = Depends(get_auth_service)):
     try:
         token = auth_service.sign_in(request)

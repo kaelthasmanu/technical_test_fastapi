@@ -6,5 +6,6 @@ routers = APIRouter()
 router_list = [auth_router]
 
 for router in router_list:
-    router.tags = routers.tags.append("v2")
+    existing = getattr(router, "tags", None) or []
+    router.tags = existing + ["v2"]
     routers.include_router(router)
