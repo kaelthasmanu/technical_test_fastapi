@@ -2,7 +2,7 @@ from contextlib import AbstractContextManager, contextmanager
 from typing import Any, Generator
 
 from sqlalchemy import create_engine, orm
-from sqlalchemy.ext.declarative import as_declarative, declared_attr
+from sqlalchemy.orm import as_declarative, declared_attr
 from sqlalchemy.orm import Session
 
 

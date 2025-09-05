@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
@@ -14,20 +16,31 @@ from loguru import logger
 @singleton
 class AppCreator:
     def __init__(self):
+        # create app with lifespan that will initialize shared resources
+        @asynccontextmanager
+        async def lifespan(app: FastAPI):
+            # configure logging with current configs
+            setup_logging(configs)
+
+            # instantiate DI container and database here (startup)
+            self.container = Container()
+            # create the DB provider instance (engine/session factory)
+            self.db = self.container.db()
+
+            logger.info("Application startup complete")
+            try:
+                yield
+            finally:
+                # place any shutdown cleanup here
+                logger.info("Application shutdown")
+
         # set app default
         self.app = FastAPI(
             title=configs.PROJECT_NAME,
             openapi_url=f"{configs.API}/openapi.json",
             version="0.0.1",
+            lifespan=lifespan,
         )
-
-        # logging
-        setup_logging(configs)
-
-        # set db and container
-        self.container = Container()
-        self.db = self.container.db()
-        # self.db.create_database()
 
         # set cors
         if configs.BACKEND_CORS_ORIGINS:
@@ -50,16 +63,9 @@ class AppCreator:
         self.app.include_router(v1_routers, prefix=configs.API_V1_STR)
         self.app.include_router(v2_routers, prefix=configs.API_V2_STR)
 
-        @self.app.on_event("startup")
-        async def _on_startup():
-            logger.info("Application startup complete")
-
-        @self.app.on_event("shutdown")
-        async def _on_shutdown():
-            logger.info("Application shutdown")
-
 
 app_creator = AppCreator()
 app = app_creator.app
-db = app_creator.db
-container = app_creator.container
+# db and container will be available after the app startup (TestClient triggers it)
+db = getattr(app_creator, "db", None)
+container = getattr(app_creator, "container", None)

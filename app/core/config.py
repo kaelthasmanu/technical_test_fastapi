@@ -3,6 +3,7 @@ from typing import List
 
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
+from pydantic import ConfigDict
 
 load_dotenv()
 
@@ -73,9 +74,8 @@ class Configs(BaseSettings):
     PAGE: int = 1
     PAGE_SIZE: int = 20
     ORDERING: str = "-id"
-
-    class Config:
-        case_sensitive = True
+     
+    model_config = ConfigDict(case_sensitive=True)
 
 
 if ENV == "prod":

@@ -3,6 +3,8 @@
 ## description
 FastAPI project for technical test RestAPI Application.
 
+![App and DB running in Docker](images/app_and_db_running_in_docker.png)
+
 ## concept
 1. Minimal functionality.
 2. Convincing architecture.
