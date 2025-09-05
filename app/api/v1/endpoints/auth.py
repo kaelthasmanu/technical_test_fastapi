@@ -14,8 +14,9 @@ def get_auth_service() -> AuthService:
 
 @router.post("/login", response_model=SignInResponse)
 def login(request: SignIn, auth_service: AuthService = Depends(get_auth_service)):
-    token = auth_service.authenticate_user(request)
-    if not token:
+    try:
+        token = auth_service.sign_in(request)
+    except Exception:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     return SignInResponse(access_token=token)
 
