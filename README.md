@@ -302,14 +302,22 @@ DB_USER=root
 DB_PASSWORD=qwer1234
 DB_HOST=localhost
 DB_PORT=3306
+SECRET_KEY=change_me_in_prod
+ADMIN_EMAIL=admin@local
+ADMIN_PASSWORD=admin
+ADMIN_NAME=Administrator
 
 # postgres case
 ENV=dev
 DB=postgresql
-DB_USER=gyu
-DB_PASSWORD=
-DB_HOST=localhost
+DB_USER=todo_user
+DB_PASSWORD=todo_pass
+DB_HOST=db
 DB_PORT=5432
+SECRET_KEY=change_me_in_prod
+ADMIN_EMAIL=admin@local
+ADMIN_PASSWORD=admin
+ADMIN_NAME=Administrator
 ```
 
 ## references
